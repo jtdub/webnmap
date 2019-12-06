@@ -64,7 +64,7 @@ var attempt = 0
 var max_attempts = 100
 
 function poll() {
-    if (task_id && attempt < 20) {
+    if (task_id && attempt < max_attempts) {
         setTimeout(function() {
             $("#scanResults").html("SCAN IN PROGRESS")
             $.ajax({
@@ -74,13 +74,18 @@ function poll() {
                 success: function(result) {
                     if (result.state == "SUCCESS") {
                         attempt = 100;
+                        status = result.state
                         $("#scanResults").html(result.details)
+                        $("#progressBar").attr("class", "progress-bar bg-success")
+                        $("#progressBar").attr("aria-valuenow", attempt)
+                        $("#progressBar").attr("style", "width: " + attempt + "%")
                     }
                 }
             });
             attempt++;
-            if (attempt >= 100) {
-                $("#progressBar").attr("class", "progress-bar bg-success")    
+            if (attempt >= 100 && result.state != "SUCCESS") {
+                $("#progressBar").attr("class", "progress-bar bg-danger")
+                $("#scanResults").html("SCAN FAILED")
             }
             $("#progressBar").attr("aria-valuenow", attempt)
             $("#progressBar").attr("style", "width: " + attempt + "%")
