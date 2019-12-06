@@ -1,4 +1,8 @@
 # webnmap
 django based nmap scanner
 
-Playing around with celery results and jquery
+this is just the result of teaching myself how to use javascript to fetch task queue results.
+
+```
+docker-compose up
+```
