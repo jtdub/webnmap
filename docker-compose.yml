@@ -8,10 +8,12 @@ services:
             - webnmap.env
     queue:
         image: 'rabbitmq:3'
+        restart: always
         env_file:
             - webnmap.env
     worker:
         build: .
+        restart: always
         env_file:
             - webnmap.env
         command: bash -c "apt-get update && apt-get install -y nmap && cd /opt/webnmap && celery -A webnmap worker -l info"
@@ -20,6 +22,7 @@ services:
             - queue
     web:
         build: .
+        restart: always
         env_file:
             - webnmap.env
         command: bash -c "cd /opt/webnmap && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
